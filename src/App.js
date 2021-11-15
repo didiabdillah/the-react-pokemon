@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from './components/layout/Navbar';
 import Dashboard from './components/layout/Dashboard';
 import Pokemon from './components/pokemon/Pokemon';
+import MyPokemon from './components/pokemon/MyPokemon';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/pokemon/:pokemonIndex" component={Pokemon} />
-  
+            <Route exact path="/mypokemon/" component={MyPokemon} />
           </Switch>
           </div>
     </div>
