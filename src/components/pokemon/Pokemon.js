@@ -211,7 +211,7 @@ export default class Pokemon extends Component {
       let oldData = JSON.parse(localStorage.getItem('pokemon'));
       let data = oldData ? [...oldData, {id: id, index: index, name: this.state.name,nickname: nickname}] : [{id: id, index: index, name: this.state.name, nickname: nickname}];
       localStorage.setItem('pokemon', JSON.stringify(data));
-      this.setState({modalIsOpen: false})
+      this.setState({modalIsOpen: false});
     } 
     
     const catchPokemon = () =>{
