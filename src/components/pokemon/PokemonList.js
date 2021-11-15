@@ -4,7 +4,7 @@ import PokemonCard from './PokemonCard'
 
 export default class PokemonList extends Component {
     state = {
-        url: "https://pokeapi.co/api/v2/pokemon/",
+        url: "https://pokeapi.co/api/v2/pokemon/?limit=500",
         pokemon: null
     };
 
@@ -16,6 +16,7 @@ export default class PokemonList extends Component {
     render() {
         return (
             <>
+            <h2 className="my-3">Pokemon List</h2>
             {this.state.pokemon ? (
                 <div className="row">
                     {this.state.pokemon.map(pokemon => (
@@ -27,7 +28,7 @@ export default class PokemonList extends Component {
                     ))}
                 </div>
             ) : (
-                <h1>Loading Pokemon</h1>
+                <h2>Loading Pokemon...</h2>
             )}
             </>
         )

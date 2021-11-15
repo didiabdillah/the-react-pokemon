@@ -4,7 +4,7 @@ export default class MyPokemon extends Component {
     render() {
         return (
             <div>
-                <h1>My Pokemon</h1>
+                <h2 className="my-3">My Pokemon</h2>
             </div>
         )
     }

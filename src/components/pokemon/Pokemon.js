@@ -196,6 +196,7 @@ export default class Pokemon extends Component {
 
     return (
       <div className="col">
+        <h2 className="my-3">Pokemon Detail</h2>
         <div className="card">
           <div className="card-header">
             <div className="row">
