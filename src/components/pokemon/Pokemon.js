@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Axios from 'axios';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 const TYPE_COLORS = {
   bug: 'B1C12E',
@@ -28,6 +31,7 @@ export default class Pokemon extends Component {
     pokemonIndex: '',
     imageUrl: '',
     types: [],
+    moves: [],
     description: '',
     statTitleWidth: 3,
     statBarWidth: 9,
@@ -48,7 +52,9 @@ export default class Pokemon extends Component {
     genderRatioFemale: '',
     evs: '',
     hatchSteps: '',
-    themeColor: '#EF5350'
+    themeColor: '#EF5350',
+    modalIsOpen: false,
+    nickname: ''
   };
 
   async componentDidMount() {
@@ -99,6 +105,7 @@ export default class Pokemon extends Component {
       Math.round((pokemonRes.data.weight * 0.220462 + 0.00001) * 100) / 100;
 
     const types = pokemonRes.data.types.map(type => type.type.name);
+    const moves = pokemonRes.data.moves.map(move => move.move.name);
 
     const themeColor = `${TYPE_COLORS[types[types.length - 1]]}`;
 
@@ -170,6 +177,7 @@ export default class Pokemon extends Component {
       pokemonIndex,
       name,
       types,
+      moves,
       stats: {
         hp,
         attack,
@@ -182,16 +190,38 @@ export default class Pokemon extends Component {
       height,
       weight,
       abilities,
-      evs
+      evs,
+      nickname: name
     });
   }
 
-
+  // onChangeName = this.onChangeName.bind(this);
+  
+  
   render() {
+    // Form Events
+    const onChangeNickname = (e) => {
+      this.setState({ nickname: e.target.value });
+    }
+    const onSubmit = (e) =>{
+      // this.onSubmit.bind(this);
+      let id = parseInt(Math.floor(Math.random() * 999999999) + new Date().getTime().toString()).toString(16);
+      let index = this.state.pokemonIndex;
+      let nickname = this.state.nickname;
+      let oldData = JSON.parse(localStorage.getItem('pokemon'));
+      let data = oldData ? [...oldData, {id: id, index: index, name: this.state.name,nickname: nickname}] : [{id: id, index: index, name: this.state.name, nickname: nickname}];
+      localStorage.setItem('pokemon', JSON.stringify(data));
+      this.setState({modalIsOpen: false})
+    } 
+    
     const catchPokemon = () =>{
       let catchChance = Math.random() < 0.5;
-      console.log(catchChance);
-      console.log(catchChance==true ? 'catched' : 'not catched');
+
+      if(catchChance==true){
+        this.setState({modalIsOpen: true})
+      }else{
+        alert('Failed To Catch');
+      }
     }
 
     return (
@@ -229,6 +259,22 @@ export default class Pokemon extends Component {
             <div className="row">
               <div className="col-12">
                 <button className="btn btn-primary mb-0" style={{float: 'right'}} onClick={catchPokemon}> <i className='fas fa-bookmark' /> Catch Pokemon</button>
+        
+                <Modal isOpen={this.state.modalIsOpen} style={{overlay:{backgroundColor: 'grey'}}}>
+                  <div className="container">
+                  <h2 className="mt-4">Enter Your Pokemon Nickname</h2>
+                  <p>You Catched A Pokemon</p>
+
+                <form onSubmit={onSubmit}>
+                    <div className="form-group">
+                        <label>Nickname</label>
+                        <input type="text" className="form-control" name="nickname" value={this.state.nickname} onChange={onChangeNickname}/>
+                    </div>
+                    <button type="submit" className="btn btn-primary btn-block mt-4">Submit Nickname</button>
+                </form>
+            </div>
+                </Modal>
+  
               </div>
             </div>
             <div className="row align-items-center">
@@ -396,13 +442,13 @@ export default class Pokemon extends Component {
                     <h6 className="float-right">Height:</h6>
                   </div>
                   <div className="col-6">
-                    <h6 className="float-left">{this.state.height} ft.</h6>
+                    <h6 className="float-left">{this.state.height * 0.3048} m.</h6>
                   </div>
                   <div className="col-6">
                     <h6 className="float-right">Weight:</h6>
                   </div>
                   <div className="col-6">
-                    <h6 className="float-left">{this.state.weight} lbs</h6>
+                    <h6 className="float-left">{this.state.weight * 0.453592} kg</h6>
                   </div>
                   <div className="col-6">
                     <h6 className="float-right">Catch Rate:</h6>
@@ -472,6 +518,30 @@ export default class Pokemon extends Component {
                     <h6 className="float-left">{this.state.evs}</h6>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div className="card-body">
+            <h5 className="card-title text-center">Moves</h5>
+            <div className="row">
+              <div className="col-md-12">
+                 {this.state.moves.map(move => (
+                    <span
+                      key={move}
+                      className="badge badge-pill mx-1"
+                      style={{
+                        backgroundColor: '#934594',
+                        color: 'white'
+                      }}
+                    >
+                      {move
+                        .toLowerCase()
+                        .split(' ')
+                        .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+                        .join(' ')}
+                    </span>
+                  ))}
               </div>
             </div>
           </div>

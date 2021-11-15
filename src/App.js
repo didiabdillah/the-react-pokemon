@@ -10,8 +10,8 @@ import NavbarSection from './components/layout/NavbarSection';
 function App() {
   return (
     <Router>
-    <NavbarSection />
     <div className="App">
+       <NavbarSection />
         <div className="container">
           <Switch>
             <Route exact path="/" component={Dashboard} />
